@@ -1,5 +1,4 @@
-
-import imagebrowser.Image;
+package Model;
 
 public interface ImageLoader {
 
