@@ -1,4 +1,4 @@
-package Model;
+package imagebrowser.Model;
 
 public class Dimension {
 
@@ -17,4 +17,5 @@ public class Dimension {
     public int getHeight() {
         return height;
     }
+
 }

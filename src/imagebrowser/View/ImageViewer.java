@@ -1,6 +1,6 @@
-package View;
+package imagebrowser.View;
 
-import Model.Image;
+import imagebrowser.Model.Image;
 
 public abstract class ImageViewer {
 

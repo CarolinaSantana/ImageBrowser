@@ -1,6 +1,5 @@
-package Model;
+package imagebrowser.Model;
 
-import java.awt.Dimension;
 
 public abstract class Image {
 
