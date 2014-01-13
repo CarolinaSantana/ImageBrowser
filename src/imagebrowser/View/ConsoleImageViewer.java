@@ -2,12 +2,10 @@ package imagebrowser.View;
 
 public class ConsoleImageViewer extends ImageViewer {
     
-    @Override
+   @Override
     public void refresh() {
-        System.out.print(getImage().getDimension().getWidth());
-        System.out.print("x");
-        System.out.print(getImage().getDimension().getHeight());
-        System.out.println("");
+        System.out.println(getImage().getImage());
     }
+
 
 }

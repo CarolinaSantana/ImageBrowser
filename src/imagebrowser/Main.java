@@ -3,45 +3,58 @@ package imagebrowser;
 import imagebrowser.Control.ApplicationFrame;
 import imagebrowser.Control.NextImageCommand;
 import imagebrowser.Control.PrevImageCommand;
-import imagebrowser.Model.Dimension;
 import imagebrowser.Model.Image;
 import imagebrowser.Model.ImageLoader;
 import imagebrowser.Model.ProxyImage;
 import imagebrowser.Model.RealImage;
-import imagebrowser.View.ConsoleImageViewer;
 import imagebrowser.View.ImageViewer;
+import imagebrowser.View.ImageViewerPanel;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
+    String path = "C:\\Users\\Public\\Pictures\\t";
+    File folder = new File(path);
+    File[] list = folder.listFiles();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Main().execute();
     }
 
-    private void execute() {
+    private void execute() throws IOException {
         Image[] images = linkImages(createImages());
         ImageViewer viewer = createImageViewer(images[0]);
         createApplicationFrame(createCommands(viewer));
     }
 
-    private Image[] createImages() {
-        Image[] images = new Image[5];
-        for (int i = 0; i < images.length; i++) {
-            images[i] = createImage(i);
+     private Image[] createImages() throws IOException{
+        Image[] images = new Image[numberOfImages()];
+        for (int i = 0, j = 0; i < list.length; i++) {
+           if (isImage(list[i])){
+               images[j]=createImage(list[i]);
+               j++;
+           }
         }
         return images;
     }
-
-    private Image createImage(final int index) {
-        final int[] sizes = new int[]{200, 500, 400, 398, 100};
+   private Image createImage(final File file){
         return new ProxyImage(new ImageLoader() {
+
             @Override
             public Image load() {
-                return new RealImage(new Dimension(sizes[index], sizes[index]));
+                try {
+                    return new RealImage(file);
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
             }
         });
     }
-
     private Image[] linkImages(Image[] images) {
         for (int i = 0; i < images.length; i++) {
             Image image = images[i];
@@ -54,7 +67,7 @@ public class Main {
     }
 
     private ImageViewer createImageViewer(Image image) {
-        ImageViewer viewer = new ConsoleImageViewer();
+        ImageViewer viewer = new ImageViewerPanel();
         viewer.setImage(image);
         return viewer;
     }
@@ -68,5 +81,18 @@ public class Main {
             new PrevImageCommand(viewer),
             new NextImageCommand(viewer)
         };
+    }
+     private int numberOfImages() throws IOException {
+        int count=0;
+        for (int i = 0; i < list.length; i++) {
+            if (isImage(list[i])) count++;
+        }
+        return count;
+    }
+
+    private boolean isImage(File file) throws IOException {
+        String type = Files.probeContentType(file.toPath());
+        if(type != null && type.startsWith("image")) return true;
+        else return false;
     }
 }

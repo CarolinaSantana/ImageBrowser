@@ -1,8 +1,22 @@
 package imagebrowser.Model;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class RealImage extends Image {
 
-    private final Dimension dimension;
+    public Image next;
+    public Image prev;
+    public Dimension dimension;
+    File file;
+    BufferedImage image = null;
+
+    public RealImage(File file) throws IOException {
+        this.file = file;
+        image = ImageIO.read(file);
+    }
 
     public RealImage(Dimension dimension) {
         this.dimension = dimension;
@@ -15,19 +29,26 @@ public class RealImage extends Image {
 
     @Override
     public Image getNext() {
-        return null;
+        return next;
     }
 
     @Override
     public Image getPrev() {
-        return null;
+        return prev;
     }
 
     @Override
-    public void setNext(Image image) {
+    public void setNext(Image next) {
+        this.next = next;
     }
 
     @Override
-    public void setPrev(Image image) {
+    public void setPrev(Image prev) {
+        this.prev = prev;
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return image;
     }
 }
